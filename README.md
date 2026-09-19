@@ -10,6 +10,11 @@ Kompiler eksperimental untuk mengonversi kode program tingkat tinggi (Python AST
 ## Cara Menjalankan
 
 1. **Jalankan Kompiler Utama:**
-   ```bash
-   python compiler.py
-python test_parser.py && python nengo_adapter.py
+   <code>python compiler.py</code>
+
+2. **Jalankan Pengujian & Simulasi Nengo SNN:**
+   <code>python test_parser.py && python nengo_adapter.py</code>
+
+## Visualisasi Output Spike Train
+
+<img src="[https://raw.githubusercontent.com/aamubaroq85-crypto/neuromorphic-ast-compiler/main/spike_plot.png](https://raw.githubusercontent.com/aamubaroq85-crypto/neuromorphic-ast-compiler/main/spike_plot.png)" alt="Spike Train Output" width="100%" />
