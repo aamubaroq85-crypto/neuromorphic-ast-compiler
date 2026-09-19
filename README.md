@@ -1,5 +1,3 @@
-Berikut kode lengkap **README.md** dengan bagian instruksi yang sudah digabung menjadi satu blok kode tunggal, lengkap dengan tautan visualisasi gambar di bawahnya:
-```markdown
 # Neuromorphic Code Optimization Compiler ($\pi_{\text{eff}}$)
 
 Kompiler eksperimental untuk mengonversi kode program tingkat tinggi (Python AST) menjadi *Spike Train* berbasis modulasi fasa $\pi_{\text{eff}}$ untuk arsitektur *Neuromorphic Computing* (Spiking Neural Network).
