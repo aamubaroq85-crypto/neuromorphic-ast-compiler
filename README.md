@@ -8,6 +8,7 @@ Kompiler eksperimental untuk mengonversi kode program tingkat tinggi (Python AST
 - **Zero-Middleware Target**: Menghasilkan sinyal yang dapat dipetakan langsung ke unit neuron buatan.
 
 ## Cara Menjalankan
-```bash
-pip install numpy matplotlib
-python test_parser.py
+
+1. **Jalankan Kompiler Utama:**
+   ```bash
+   python compiler.py
