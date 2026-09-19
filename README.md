@@ -14,7 +14,7 @@ Kompiler eksperimental untuk mengonversi kode program tingkat tinggi (Python AST
    python compiler.py
    ```
  
-    2. **Jalankan Pengujian & Simulasi Nengo SNN:**
+2. **Jalankan Pengujian & Simulasi Nengo SNN:**
    ```bash
       python test_parser.py && python nengo_adapter.py
    ```
