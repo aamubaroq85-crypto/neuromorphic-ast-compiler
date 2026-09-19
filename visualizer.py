@@ -1,36 +1,31 @@
-import numpy as np
 import matplotlib.pyplot as plt
-from test_parser import MathASTParser, NeuromorphicASTCompiler
+import numpy as np
 
-def generate_spike_plot(expr_str, variables, output_file="spike_plot.png"):
-    # 1. Parse & Compile
-    parser = MathASTParser()
-    compiler = NeuromorphicASTCompiler()
+def plot_spike_train(spike_data, time_steps, expression_str="x + 5"):
+    """
+    Membuat visualisasi Spike Train dengan keterangan parameter dan pelabelan sumbu yang detail.
+    """
+    plt.figure(figsize=(10, 6))
     
-    parsed_nodes = parser.parse_expression(expr_str)
-    compiled_spikes = compiler.compile_ast_to_spikes(parsed_nodes, variables)
-
-    # 2. Visualisasi Spike Train
-    fig, ax = plt.subplots(figsize=(10, 5))
+    # Plotting spike trains untuk setiap neuron/layer
+    for i, spike in enumerate(spike_data):
+        plt.plot(time_steps, spike + (i * 1.2), label=f"Step {i+1}: Node")
+        
+    plt.xlabel("Waktu Simulasi (ms)", fontsize=11, fontweight='bold')
+    plt.ylabel("Aktivasi / Blok Neuron", fontsize=11, fontweight='bold')
+    plt.title(f"Neuromorphic Spike Train Output (\\pi_{{eff}} Modulated)\nEkspresi AST: ({expression_str})", fontsize=12, fontweight='bold')
     
-    time_steps = np.linspace(0, 10, 50)
-    for idx, item in enumerate(compiled_spikes):
-        op_label = f"{item['node'][0]}:{item['node'][1]}"
-        # Shift bertingkat di sumbu Y agar antar-node terpisah jelas
-        ax.plot(time_steps, item['spikes'] + idx * 1.5, drawstyle='steps-post', label=f"Step {idx+1}: {op_label}")
-
-    ax.set_title(f"Neuromorphic Spike Train Output (pi_eff Modulated)\nExpression: '{expr_str}'")
-    ax.set_xlabel("Time (ms)")
-    ax.set_ylabel("Execution Steps / Neurons")
-    ax.set_yticks([idx * 1.5 for idx in range(len(compiled_spikes))])
-    ax.set_yticklabels([f"Node {idx+1}" for idx in range(len(compiled_spikes))])
-    ax.grid(True, linestyle='--', alpha=0.5)
-    ax.legend(loc='upper right')
-
+    plt.grid(True, linestyle='--', alpha=0.6)
+    plt.legend(loc='upper right', bbox_to_anchor=(1.15, 1.0))
     plt.tight_layout()
-    plt.savefig(output_file)
-    print(f"Grafik spike berhasil disimpan sebagai '{output_file}'")
+    
+    # Simpan otomatis sebagai file gambar
+    plt.savefig("spike_plot.png", dpi=300)
     plt.close()
+    print("[INFO] Grafik spike_plot.png berhasil diperbarui secara otomatis dengan parameter lengkap.")
 
 if __name__ == "__main__":
-    generate_spike_plot("(x + 5) * (y - 2)", {'x': 10, 'y': 8})
+    # Contoh data dummy untuk pengujian mandiri visualizer
+    t = np.linspace(0, 10, 100)
+    dummy_spikes = [np.sin(t + i) > 0.5 for i in range(5)]
+    plot_spike_train(dummy_spikes, t, "x + 5")
