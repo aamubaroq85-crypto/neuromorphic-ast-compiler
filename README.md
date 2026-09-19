@@ -15,4 +15,5 @@ Kompiler eksperimental untuk mengonversi kode program tingkat tinggi (Python AST
 2. **Jalankan Pengujian (Unit Test):**
    ```bash
    python test_parser.py
-python nengo_adapter.py
+   python nengo_adapter.py
+
