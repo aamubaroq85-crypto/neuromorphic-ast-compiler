@@ -12,10 +12,12 @@ Kompiler eksperimental untuk mengonversi kode program tingkat tinggi (Python AST
 1. **Jalankan Kompiler Utama:**
    ```bash
    python compiler.py
-    ```
+   ```
+ 
+    2. **Jalankan Pengujian & Simulasi Nengo SNN:**
+   ```bash
+      python test_parser.py && python nengo_adapter.py
+   ```
 
-   2. **Jalankan Pengujian & Simulasi Nengo SNN:**
-    ```bash
-       python test_parser.py && python nengo_adapter.py
-      ```
+      
 
