@@ -9,8 +9,5 @@ Kompiler eksperimental untuk mengonversi kode program tingkat tinggi (Python AST
 
 ## Cara Menjalankan
 ```bash
-pip install numpy
-python main.py
-## Spike Train Output Visualization
-
-![Spike Train Output](spike_plot.png)
+pip install numpy matplotlib
+python test_parser.py
