@@ -3,115 +3,125 @@ import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
 import ast
+import datetime
 
 # Konfigurasi Halaman Dashboard
 st.set_page_config(
-    page_title="Neuromorphic Compiler & SNN Suite",
-    page_icon="⚡",
+    page_title="Neuromorphic Enterprise Suite ($\pi_{\text{eff}}$)",
+    page_icon="🛡️",
     layout="wide"
 )
 
-st.title("⚡ Neuromorphic Code Optimization Compiler ($\pi_{\text{eff}}$)")
-st.markdown("Suite kompilasi tingkat lanjut: AST Parser riil, Simulasi SNN Nengo, dan Analisis Ekspor Laporan.")
+st.title("🛡️ Neuromorphic Enterprise Platform ($\pi_{\text{eff}}$)")
+st.markdown("Platform Kompilasi & Optimasi Cerdas Berbasis Spiking Neural Network (SNN) Kelas Korporat.")
 
-# --- SIDEBAR PENGATURAN ---
-st.sidebar.header("⚙️ Konfigurasi Kompilator")
+# --- 1. SISTEM LISENSI & TIERED ACCESS (Sidebar) ---
+st.sidebar.header("🔑 Autentikasi & Lisensi")
+license_key = st.sidebar.text_input("Masukkan Lisensi Enterprise API", type="password", value="BAROQ-ENTERPRISE-2026")
+
+# Validasi tier berdasarkan kunci lisensi
+is_enterprise = "ENTERPRISE" in license_key or "PRO" in license_key
+if is_enterprise:
+    st.sidebar.success("✅ Lisensi Aktif: **Tier Enterprise (Akses Penuh)**")
+else:
+    st.sidebar.warning("⚠️ Lisensi Standar: **Tier Free (Fitur Dibatasi)**")
+
+st.sidebar.header("⚙️ Konfigurasi Kompilator & SNN")
 expr_input = st.sidebar.text_input("Ekspresi Matematika AST", value="(x + 5) * (y - 2)")
 sim_steps = st.sidebar.slider("Langkah Waktu Simulasi (ms)", min_value=10, max_value=200, value=100)
 
-st.sidebar.subheader("🧠 Parameter SNN Nengo")
-n_neurons = st.sidebar.slider("Jumlah Neuron Ensemble", min_value=10, max_value=100, value=50)
-intercept_val = st.sidebar.slider("Intercept Neuron", min_value=-0.9, max_value=0.0, value=-0.5)
+# --- SIMULASI SNN KUSTOM (Fitur Premium) ---
+st.sidebar.subheader("🧠 Model SNN Kustom")
+snn_architecture = st.sidebar.selectbox(
+    "Pilih Arsitektur SNN", 
+    ["Standard Leaky Integrate-and-Fire (LIF)", "Adaptive LIF (ALIF)", "Spiking Convolutional Core"]
+)
+n_neurons = st.sidebar.slider("Jumlah Neuron Ensemble", min_value=10, max_value=200, value=100 if is_enterprise else 50)
 
-# --- 1. INTEGRASI DATA RIIL DARI PARSER (AST Analysis) ---
+# --- 2. ANALISIS AST PARSER RIIL ---
 st.subheader("1. 🔍 Analisis AST Parser Riil")
 ast_nodes_count = 0
 parsed_structure = []
 
 try:
-    # Menguraikan ekspresi pengguna menggunakan Abstract Syntax Tree (AST) Python riil
     parsed_tree = ast.parse(expr_input, mode='eval')
     for node in ast.walk(parsed_tree):
         parsed_structure.append(type(node).__name__)
         ast_nodes_count += 1
-    st.success(f"Berhasil mengurai ekspresi matematika secara riil! Total node AST terdeteksi: **{ast_nodes_count}**")
-    st.code(f"Struktur Node AST: {list(set(parsed_structure))}", language="python")
+    st.success(f"Berhasil mengurai ekspresi matematika secara riil! Total node terdeteksi: **{ast_nodes_count}**")
 except SyntaxError as e:
-    st.error(f"Kesalahan Sintaks pada Ekspresi: {e}")
+    st.error(f"Kesalahan Sintaks: {e}")
     st.stop()
 
-# --- 2. OPTIMASI SKENARIO SNN DENGAN NENGO & VISUALISASI ---
-st.subheader("2. 📊 Simulasi SNN & Modulasi Fasa $\pi_{\text{eff}}$")
+# --- 3. EKsekusi SIMULASI & BENCHMARKING ENERGI ---
+st.subheader(f"2. 📊 Simulasi Arsitektur [{snn_architecture}] & Benchmarking")
 
-if st.button("🚀 Jalankan Kompilasi & Simulasi Nengo SNN"):
-    with st.spinner("Mensimulasikan Spiking Neural Network (SNN) dan modulasi fasa..."):
-        
-        # Simulasi berbasis parameter Nengo kustom
+if st.button("🚀 Jalankan Kompilasi Enterprise & Analisis Energi"):
+    with st.spinner("Memproses kompilasi fasa $\pi_{\text{eff}}$ dan kalkulasi efisiensi daya..."):
         time_steps = np.linspace(0, 10, sim_steps)
-        # Menggunakan struktur node AST sebagai faktor pengali dinamis pada fasa sinyal
+        
+        # Simulasi output spike berdasarkan arsitektur SNN kustom
+        multiplier = 1.5 if "Adaptive" in snn_architecture else 1.0
         compiled_spikes = [
-            np.cos(time_steps * (i + 1) * 0.5 + (intercept_val * 2)) > 0.2 
-            for i in range(min(ast_nodes_count + 2, 6))
+            np.cos(time_steps * (i + 1) * 0.4 * multiplier) > (0.15 if is_enterprise else 0.3) 
+            for i in range(min(ast_nodes_count + 3, 8))
         ]
         
-        # Simpan ke session_state agar data bisa diekspor
+        # Simulasi Data Benchmarking Energi (pJ per operasi)
+        # Neuromorphic jauh lebih hemat energi dibanding von Neumann standar
+        power_standard_cpu = sim_steps * 12.5 # picoJoule tiruan
+        power_neuromorphic = sim_steps * 1.8  # efisiensi fasa pi_eff
+        
         st.session_state['compiled_spikes'] = compiled_spikes
         st.session_state['time_steps'] = time_steps
-        st.session_state['expr_input'] = expr_input
+        st.session_state['benchmarks'] = (power_standard_cpu, power_neuromorphic)
+        
+        # Audit Trail Log (Simulasi Pencatatan Keamanan)
+        audit_log = f"[{datetime.datetime.now()}] Kompilasi sukses oleh User (Key: {license_key[:6]}***). Model: {snn_architecture}."
+        st.session_state['audit_log'] = audit_log
 
-    st.success("Simulasi SNN dan modulasi fasa $\pi_{\text{eff}}$ selesai dijalankan!")
+    st.success("Proses optimasi enterprise dan analisis daya selesai!")
 
-# Jika data sudah ada di session state, tampilkan grafik dan ekspor
+# Visualisasi jika data tersedia di session state
 if 'compiled_spikes' in st.session_state:
     spikes = st.session_state['compiled_spikes']
     t_steps = st.session_state['time_steps']
+    power_std, power_neuro = st.session_state['benchmarks']
     
-    # Render Plot Matplotlib
-    fig, ax = plt.subplots(figsize=(10, 5))
+    # Render Plot Spike Train
+    fig, ax = plt.subplots(figsize=(10, 4))
     for i, spike in enumerate(spikes):
         ax.plot(t_steps, spike.astype(float) + (i * 1.2), label=f"Node Layer {i+1}")
-        
-    ax.set_xlabel("Waktu Simulasi (ms)", fontsize=11, fontweight='bold')
-    ax.set_ylabel("Aktivasi / Blok Neuron", fontsize=11, fontweight='bold')
-    ax.set_title(f"Neuromorphic Spike Train Output (\\pi_{{eff}} Modulated)\nEkspresi AST: ({expr_input})", fontsize=12, fontweight='bold')
-    ax.grid(True, linestyle='--', alpha=0.6)
-    ax.legend(loc='upper right', bbox_to_anchor=(1.15, 1.0))
-    plt.tight_layout()
-    
+    ax.set_title(f"Neuromorphic Spike Train Output ({snn_architecture})", fontweight='bold')
+    ax.grid(True, linestyle='--', alpha=0.5)
     st.pyplot(fig)
-
-    # --- 3. EKSPOR LAPORAN KOMPILASI (CSV & Laporan Ringkas) ---
-    st.subheader("3. 📥 Ekspor Laporan Kompilasi")
     
-    # Membentuk kamus data secara aman untuk Pandas DataFrame
+    # --- 4. GRAFIK KOMPARASI EFISIENSI ENERGI (BENCHMARKING DASHBOARD) ---
+    st.subheader("3. ⚡ Benchmarking Efisiensi Energi (CPU vs Neuromorphic $\pi_{\text{eff}}$)")
+    col_b1, col_b2 = st.columns(2)
+    with col_b1:
+        st.metric(label="Konsumsi Daya CPU Konvensional", value=f"{power_std:.1f} pJ", delta="Baseline Tinggi", delta_value="inverse")
+    with col_b2:
+        st.metric(label="Konsumsi Daya Neuromorphic $\pi_{\text{eff}}$", value=f"{power_neuro:.1f} pJ", delta=f"-{(1 - power_neuro/power_std)*100:.1f}% Hemat Energi", delta_value="normal")
+        
+    fig_bar, ax_bar = plt.subplots(figsize=(6, 3))
+    ax_bar.bar(["Interpreter Standar (CPU)", "Neuromorphic Core ($\pi_{\text{eff}}$)"], [power_std, power_neuro], color=['#ff4b4b', '#00cc96'])
+    ax_bar.set_ylabel("Estimasi Energi (pJ)")
+    st.pyplot(fig_bar)
+
+    # --- 5. AUDIT TRAIL & EKSPOR LAPORAN KORPORAT ---
+    st.subheader("4. 🔒 Audit Trail & Ekspor Laporan Enterprise")
+    st.code(st.session_state['audit_log'], language="text")
+    
     dict_export = {f"Node_{i+1}": spike for i, spike in enumerate(spikes)}
     dict_export["Time_Step_ms"] = t_steps
     df_export = pd.DataFrame(dict_export)
     
-    csv_data = df_export.to_csv(index=False).encode('utf-8')
-    
-    col1, col2 = st.columns(2)
-    with col1:
-        st.download_button(
-            label="📄 Unduh Laporan Log (CSV)",
-            data=csv_data,
-            file_name=f"neuromorphic_report_{expr_input.replace(' ', '_')}.csv",
-            mime="text/csv",
-        )
-    with col2:
-        report_summary = f"""LAPORAN KOMPILASI NEUROMORFIK PI_EFF
----------------------------------------
-Ekspresi AST: {expr_input}
-Jumlah Node Terurai: {ast_nodes_count}
-Parameter SNN Nengo: {n_neurons} Neuron (Intercept: {intercept_val})
-Status Simulasi: Sukses
----------------------------------------
-"""
-        st.download_button(
-            label="📑 Unduh Ringkasan Log (.txt)",
-            data=report_summary,
-            file_name="kompilasi_summary.txt",
-            mime="text/plain",
-        )
+    st.download_button(
+        label="📥 Unduh Laporan Audit & Log Kompilasi (CSV)",
+        data=df_export.to_csv(index=False).encode('utf-8'),
+        file_name=f"enterprise_audit_report.csv",
+        mime="text/csv",
+    )
 else:
-    st.info("💡 Klik tombol 'Jalankan Kompilasi & Simulasi Nengo SNN' di atas untuk memproses data riil dan menampilkan hasil analisis.")
+    st.info("💡 Masukkan kunci lisensi dan klik tombol 'Jalankan Kompilasi Enterprise' untuk memulai analisis mendalam.")
