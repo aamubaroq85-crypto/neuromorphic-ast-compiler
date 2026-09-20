@@ -53,30 +53,26 @@ except SyntaxError as e:
     st.error(f"Kesalahan Sintaks: {e}")
     st.stop()
 
-# --- 3. EKsekusi SIMULASI & BENCHMARKING ENERGI ---
+# --- 3. EKSEKUSI SIMULASI & BENCHMARKING ENERGI ---
 st.subheader(f"2. 📊 Simulasi Arsitektur [{snn_architecture}] & Benchmarking")
 
 if st.button("🚀 Jalankan Kompilasi Enterprise & Analisis Energi"):
     with st.spinner("Memproses kompilasi fasa $\pi_{\text{eff}}$ dan kalkulasi efisiensi daya..."):
         time_steps = np.linspace(0, 10, sim_steps)
         
-        # Simulasi output spike berdasarkan arsitektur SNN kustom
         multiplier = 1.5 if "Adaptive" in snn_architecture else 1.0
         compiled_spikes = [
             np.cos(time_steps * (i + 1) * 0.4 * multiplier) > (0.15 if is_enterprise else 0.3) 
             for i in range(min(ast_nodes_count + 3, 8))
         ]
         
-        # Simulasi Data Benchmarking Energi (pJ per operasi)
-        # Neuromorphic jauh lebih hemat energi dibanding von Neumann standar
-        power_standard_cpu = sim_steps * 12.5 # picoJoule tiruan
-        power_neuromorphic = sim_steps * 1.8  # efisiensi fasa pi_eff
+        power_standard_cpu = sim_steps * 12.5 
+        power_neuromorphic = sim_steps * 1.8  
         
         st.session_state['compiled_spikes'] = compiled_spikes
         st.session_state['time_steps'] = time_steps
         st.session_state['benchmarks'] = (power_standard_cpu, power_neuromorphic)
         
-        # Audit Trail Log (Simulasi Pencatatan Keamanan)
         audit_log = f"[{datetime.datetime.now()}] Kompilasi sukses oleh User (Key: {license_key[:6]}***). Model: {snn_architecture}."
         st.session_state['audit_log'] = audit_log
 
@@ -88,7 +84,6 @@ if 'compiled_spikes' in st.session_state:
     t_steps = st.session_state['time_steps']
     power_std, power_neuro = st.session_state['benchmarks']
     
-    # Render Plot Spike Train
     fig, ax = plt.subplots(figsize=(10, 4))
     for i, spike in enumerate(spikes):
         ax.plot(t_steps, spike.astype(float) + (i * 1.2), label=f"Node Layer {i+1}")
@@ -100,9 +95,9 @@ if 'compiled_spikes' in st.session_state:
     st.subheader("3. ⚡ Benchmarking Efisiensi Energi (CPU vs Neuromorphic $\pi_{\text{eff}}$)")
     col_b1, col_b2 = st.columns(2)
     with col_b1:
-        st.metric(label="Konsumsi Daya CPU Konvensional", value=f"{power_std:.1f} pJ", delta="Baseline Tinggi", delta_value="inverse")
+        st.metric(label="Konsumsi Daya CPU Konvensional", value=f"{power_std:.1f} pJ", delta="Baseline Tinggi")
     with col_b2:
-        st.metric(label="Konsumsi Daya Neuromorphic $\pi_{\text{eff}}$", value=f"{power_neuro:.1f} pJ", delta=f"-{(1 - power_neuro/power_std)*100:.1f}% Hemat Energi", delta_value="normal")
+        st.metric(label="Konsumsi Daya Neuromorphic $\pi_{\text{eff}}$", value=f"{power_neuro:.1f} pJ", delta=f"-{(1 - power_neuro/power_std)*100:.1f}% Hemat")
         
     fig_bar, ax_bar = plt.subplots(figsize=(6, 3))
     ax_bar.bar(["Interpreter Standar (CPU)", "Neuromorphic Core ($\pi_{\text{eff}}$)"], [power_std, power_neuro], color=['#ff4b4b', '#00cc96'])
