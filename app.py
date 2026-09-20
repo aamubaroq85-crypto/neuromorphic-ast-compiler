@@ -3,7 +3,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
 import ast
-import io
 
 # Konfigurasi Halaman Dashboard
 st.set_page_config(
@@ -84,9 +83,10 @@ if 'compiled_spikes' in st.session_state:
     # --- 3. EKSPOR LAPORAN KOMPILASI (CSV & Laporan Ringkas) ---
     st.subheader("3. 📥 Ekspor Laporan Kompilasi")
     
-    # Menyiapkan dataframe untuk ekspor CSV
-    df_export = pd.DataFrame(spikes.T, columns=[f"Node_{i+1}" for i in range(len(spikes))])
-    df_export.insert(0, "Time_Step_ms", t_steps)
+    # Membentuk kamus data secara aman untuk Pandas DataFrame
+    dict_export = {f"Node_{i+1}": spike for i, spike in enumerate(spikes)}
+    dict_export["Time_Step_ms"] = t_steps
+    df_export = pd.DataFrame(dict_export)
     
     csv_data = df_export.to_csv(index=False).encode('utf-8')
     
@@ -99,7 +99,6 @@ if 'compiled_spikes' in st.session_state:
             mime="text/csv",
         )
     with col2:
-        # Ringkasan Laporan Teks/Markdown sebagai alternatif laporan cepat
         report_summary = f"""LAPORAN KOMPILASI NEUROMORFIK PI_EFF
 ---------------------------------------
 Ekspresi AST: {expr_input}
