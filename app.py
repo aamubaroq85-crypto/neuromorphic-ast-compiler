@@ -12,12 +12,17 @@ st.set_page_config(
     layout="wide"
 )
 
+# --- INISIALISASI VARIABEL FALLBACK (Mencegah NameError) ---
+snn_architecture = "Standard Leaky Integrate-and-Fire (LIF)"
+tenant_company = "Aa Baroq Applied Technologies"
+user_role = "Enterprise Admin"
+
 st.title("🛡️ Neuromorphic Enterprise Platform ($\pi_{eff}$)")
 st.markdown("Platform Kompilasi & Optimasi Cerdas Berbasis Spiking Neural Network (SNN) Kelas Korporat dengan Arsitektur Multi-Tenant.")
 
 # --- 1. MANAJEMEN MULTI-TENANT & RBAC (Role-Based Access Control) ---
 st.sidebar.header("🔑 Manajemen Sesi & RBAC")
-tenant_company = st.sidebar.text_input("Nama Korporasi / Tenant", value="Aa Baroq Applied Technologies")
+tenant_company = st.sidebar.text_input("Nama Korporasi / Tenant", value=tenant_company)
 user_role = st.sidebar.selectbox(
     "Peran Pengguna (Role)", 
     ["Enterprise Admin", "Senior Neuromorphic Engineer", "Auditor / Compliance Officer", "Guest Viewer"]
@@ -142,7 +147,7 @@ if 'compiled_spikes' in st.session_state:
     ax_bar.set_ylabel("Estimasi Energi (pJ)")
     st.pyplot(fig_bar)
 
-    # --- 4. AUDIT TRAIL & EKSPOR LAPORAN EKSEKUTIF (CSV & PDF) ---
+    # --- 4. AUDIT TRAIL & EKSPOR LAPORAN EKSEKUTIF ---
     st.subheader("4. 🔒 Audit Trail & Ekspor Laporan Eksekutif")
     st.code(st.session_state['audit_log'], language="text")
     
