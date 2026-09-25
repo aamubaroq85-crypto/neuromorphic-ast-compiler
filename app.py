@@ -4,7 +4,6 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import ast
 import datetime
-import io
 
 # Konfigurasi Halaman Dashboard
 st.set_page_config(
@@ -92,7 +91,6 @@ if st.button("🚀 Jalankan Kompilasi Enterprise & Analisis Daya"):
         with st.spinner(f"Memproses simulasi SNN (τ_m={tau_m}ms, V_th={v_threshold}mV) untuk tenant {tenant_company}..."):
             time_steps = np.linspace(0, 15, sim_steps)
             
-            # Simulasi berbasis hyperparameter biologis
             factor = (tau_m / 20.0) * (v_threshold / 1.0)
             compiled_spikes = [
                 np.sin(time_steps * (i + 1) * 0.3 / factor) > (v_reset * 2.0)
@@ -100,7 +98,6 @@ if st.button("🚀 Jalankan Kompilasi Enterprise & Analisis Daya"):
             ]
             
             if external_df is not None and len(external_df) > 0:
-                # Modulasi tambahan dari dataset eksternal jika ada
                 compiled_spikes.append(np.linspace(0, 1, sim_steps) > 0.5)
 
             power_standard_cpu = sim_steps * 14.2 * (len(compiled_spikes))
@@ -110,6 +107,7 @@ if st.button("🚀 Jalankan Kompilasi Enterprise & Analisis Daya"):
             st.session_state['time_steps'] = time_steps
             st.session_state['benchmarks'] = (power_standard_cpu, power_neuromorphic)
             st.session_state['tenant_info'] = (tenant_company, user_role)
+            st.session_state['snn_architecture'] = snn_architecture
             
             audit_log = f"[{datetime.datetime.now()}] Kompilasi Tenant: {tenant_company} | Role: {user_role} | Model: {snn_architecture} | Param: τ_m={tau_m}, V_th={v_threshold}."
             st.session_state['audit_log'] = audit_log
@@ -122,11 +120,12 @@ if 'compiled_spikes' in st.session_state:
     t_steps = st.session_state['time_steps']
     power_std, power_neuro = st.session_state['benchmarks']
     t_comp, u_role = st.session_state['tenant_info']
+    current_arch = st.session_state.get('snn_architecture', snn_architecture)
     
     fig, ax = plt.subplots(figsize=(10, 4))
     for i, spike in enumerate(spikes):
         ax.plot(t_steps, spike.astype(float) + (i * 1.2), label=f"Neuron/Node Layer {i+1}")
-    ax.set_title(f"Neuromorphic Spike Train Output ({snn_architecture}) - {t_comp}", fontweight='bold')
+    ax.set_title(f"Neuromorphic Spike Train Output ({current_arch}) - {t_comp}", fontweight='bold')
     ax.grid(True, linestyle='--', alpha=0.5)
     st.pyplot(fig)
     
@@ -160,7 +159,6 @@ if 'compiled_spikes' in st.session_state:
             mime="text/csv",
         )
     with col_dl2:
-        # Pembuatan HTML Laporan Eksekutif untuk diunduh sebagai ringkasan profesional
         html_report = f"""
         <html>
         <head><title>Executive Audit Report - {t_comp}</title></head>
@@ -171,7 +169,7 @@ if 'compiled_spikes' in st.session_state:
             <p><strong>Tenant / Korporasi:</strong> {t_comp}</p>
             <p><strong>Pengguna / Peran:</strong> {u_role}</p>
             <p><strong>Waktu Eksekusi:</strong> {datetime.datetime.now()}</p>
-            <p><strong>Arsitektur SNN:</strong> {snn_architecture}</p>
+            <p><strong>Arsitektur SNN:</strong> {current_arch}</p>
             <p><strong>Hyperparameter:</strong> τ_m = {tau_m} ms, V_th = {v_threshold} mV, V_reset = {v_reset} mV</p>
             <h3>Hasil Benchmarking Energi</h3>
             <ul>
@@ -194,3 +192,15 @@ if 'compiled_spikes' in st.session_state:
         )
 else:
     st.info("💡 Konfigurasikan parameter di sidebar, unggah dataset (opsional), lalu klik tombol 'Jalankan Kompilasi Enterprise' untuk memulai analisis komprehensif.")
+
+# --- 5. FOOTER PROFESIONAL ---
+st.markdown("---")
+st.markdown(
+    """
+    <div style="text-align: center; color: #666; font-size: 14px; padding: 10px;">
+        <p><b>Neuromorphic Enterprise Platform ($\pi_{eff}$)</b> &bull; Dikembangkan oleh <b>Aa Baroq Applied Technologies</b></p>
+        <p>Sistem Kompilasi Cerdas Berbasis Spiking Neural Network (SNN) &copy; 2026. Hak Cipta Dilindungi Undang-Undang.</p>
+    </div>
+    """,
+    unsafe_allow_html=True
+)
