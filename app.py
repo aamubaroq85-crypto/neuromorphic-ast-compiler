@@ -7,12 +7,12 @@ import datetime
 
 # Konfigurasi Halaman Dashboard
 st.set_page_config(
-    page_title="Neuromorphic Enterprise Suite ($\pi_{\text{eff}}$)",
+    page_title="Neuromorphic Enterprise Suite (π_eff)",
     page_icon="🛡️",
     layout="wide"
 )
 
-st.title("🛡️ Neuromorphic Enterprise Platform ($\pi_{\text{eff}}$)")
+st.title("🛡️ Neuromorphic Enterprise Platform ($\pi_{eff}$)")
 st.markdown("Platform Kompilasi & Optimasi Cerdas Berbasis Spiking Neural Network (SNN) Kelas Korporat.")
 
 # --- 1. SISTEM LISENSI & TIERED ACCESS (Sidebar) ---
@@ -57,7 +57,7 @@ except SyntaxError as e:
 st.subheader(f"2. 📊 Simulasi Arsitektur [{snn_architecture}] & Benchmarking")
 
 if st.button("🚀 Jalankan Kompilasi Enterprise & Analisis Energi"):
-    with st.spinner("Memproses kompilasi fasa $\pi_{\text{eff}}$ dan kalkulasi efisiensi daya..."):
+    with st.spinner("Memproses kompilasi fasa $\pi_{eff}$ dan kalkulasi efisiensi daya..."):
         time_steps = np.linspace(0, 10, sim_steps)
         
         multiplier = 1.5 if "Adaptive" in snn_architecture else 1.0
@@ -92,15 +92,15 @@ if 'compiled_spikes' in st.session_state:
     st.pyplot(fig)
     
     # --- 4. GRAFIK KOMPARASI EFISIENSI ENERGI (BENCHMARKING DASHBOARD) ---
-    st.subheader("3. ⚡ Benchmarking Efisiensi Energi (CPU vs Neuromorphic $\pi_{\text{eff}}$)")
+    st.subheader("3. ⚡ Benchmarking Efisiensi Energi (CPU vs Neuromorphic $\pi_{eff}$)")
     col_b1, col_b2 = st.columns(2)
     with col_b1:
         st.metric(label="Konsumsi Daya CPU Konvensional", value=f"{power_std:.1f} pJ", delta="Baseline Tinggi")
     with col_b2:
-        st.metric(label="Konsumsi Daya Neuromorphic $\pi_{\text{eff}}$", value=f"{power_neuro:.1f} pJ", delta=f"-{(1 - power_neuro/power_std)*100:.1f}% Hemat")
+        st.metric(label="Konsumsi Daya Neuromorphic $\pi_{eff}$", value=f"{power_neuro:.1f} pJ", delta=f"-{(1 - power_neuro/power_std)*100:.1f}% Hemat")
         
     fig_bar, ax_bar = plt.subplots(figsize=(6, 3))
-    ax_bar.bar(["Interpreter Standar (CPU)", "Neuromorphic Core ($\pi_{\text{eff}}$)"], [power_std, power_neuro], color=['#ff4b4b', '#00cc96'])
+    ax_bar.bar(["Interpreter Standar (CPU)", "Neuromorphic Core ($\pi_{eff}$)"], [power_std, power_neuro], color=['#ff4b4b', '#00cc96'])
     ax_bar.set_ylabel("Estimasi Energi (pJ)")
     st.pyplot(fig_bar)
 
